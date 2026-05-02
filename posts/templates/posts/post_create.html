@@ -1,0 +1,25 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Post - ContentForge</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <main class="container">
+        <h1>Create Post</h1>
+
+        <form method="post" class="card">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button class="button" type="submit">Generate Drafts</button>
+        </form>
+
+        <p>
+            <a href="{% url 'post_list' %}">Back to posts</a>
+        </p>
+    </main>
+</body>
+</html>

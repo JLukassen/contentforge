@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ContentForge</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <main class="container">
+        <h1>ContentForge</h1>
+
+        <a class="button" href="{% url 'post_create' %}">Create New Post</a>
+
+        <hr>
+
+        {% for post in posts %}
+            <section class="card">
+                <h2>
+                    <a href="{% url 'post_detail' post.pk %}">
+                        {{ post.title }}
+                    </a>
+                </h2>
+
+                <p><strong>Status:</strong> {{ post.status }}</p>
+                <p><strong>Created:</strong> {{ post.created_at }}</p>
+            </section>
+        {% empty %}
+            <p>No posts yet.</p>
+        {% endfor %}
+    </main>
+</body>
+</html>

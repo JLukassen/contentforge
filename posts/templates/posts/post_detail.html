@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }} - ContentForge</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <main class="container">
+        <h1>{{ post.title }}</h1>
+
+        <p><strong>Status:</strong> {{ post.status }}</p>
+        <p><strong>Scheduled For:</strong> {{ post.scheduled_for }}</p>
+
+        <hr>
+
+        <section class="card">
+            <h2>Master Post</h2>
+            <textarea readonly>{{ post.master_text }}</textarea>
+        </section>
+
+        <section class="card">
+            <h2>X Version</h2>
+            <textarea readonly>{{ post.x_text }}</textarea>
+        </section>
+
+        <section class="card">
+            <h2>Reddit Title</h2>
+            <input type="text" value="{{ post.reddit_title }}" readonly>
+
+            <h2>Reddit Body</h2>
+            <textarea readonly>{{ post.reddit_body }}</textarea>
+        </section>
+
+        <section class="card">
+            <h2>Instagram Caption</h2>
+            <textarea readonly>{{ post.instagram_caption }}</textarea>
+        </section>
+
+        <p>
+            <a href="{% url 'post_preview' post.pk %}">Preview</a> |
+            <a href="{% url 'post_list' %}">Back to posts</a>
+        </p>
+    </main>
+</body>
+</html>
