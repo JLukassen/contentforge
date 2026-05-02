@@ -10,7 +10,38 @@
     <main class="container">
         <h1>ContentForge</h1>
 
+        <p class="subtitle">Draft once. Format everywhere.</p>
+
         <a class="button" href="{% url 'post_create' %}">Create New Post</a>
+
+        <section class="card">
+            <h2>Filters</h2>
+
+            <form method="get" class="filter-form">
+                <label for="category">Category</label>
+                <select name="category" id="category">
+                    <option value="">All Categories</option>
+                    {% for value, label in category_choices %}
+                        <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                    <option value="">All Statuses</option>
+                    {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Apply Filters</button>
+                <a href="{% url 'post_list' %}">Clear</a>
+            </form>
+        </section>
 
         <hr>
 
@@ -22,11 +53,29 @@
                     </a>
                 </h2>
 
-                <p><strong>Status:</strong> {{ post.status }}</p>
+                <p><strong>Category:</strong> {{ post.get_category_display }}</p>
+                <p><strong>Main Status:</strong> {{ post.get_status_display }}</p>
+
+                <div class="platform-status-grid">
+                    <p><strong>X:</strong> {{ post.get_x_status_display }}</p>
+                    <p><strong>Reddit:</strong> {{ post.get_reddit_status_display }}</p>
+                    <p><strong>Instagram:</strong> {{ post.get_instagram_status_display }}</p>
+                </div>
+
                 <p><strong>Created:</strong> {{ post.created_at }}</p>
+                <p><strong>Scheduled:</strong> {{ post.scheduled_for }}</p>
+
+                <p>
+                    <a href="{% url 'post_detail' post.pk %}">View</a> |
+                    <a href="{% url 'post_update' post.pk %}">Edit</a> |
+                    <a href="{% url 'post_archive' post.pk %}">Archive</a> |
+                    <a href="{% url 'post_delete' post.pk %}">Delete</a>
+                </p>
             </section>
         {% empty %}
-            <p>No posts yet.</p>
+            <section class="card">
+                <p>No posts yet.</p>
+            </section>
         {% endfor %}
     </main>
 </body>

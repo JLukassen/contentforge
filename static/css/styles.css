@@ -12,6 +12,11 @@ body {
     padding: 2rem;
 }
 
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
 .card {
     background: #fff;
     border-radius: 10px;
@@ -29,6 +34,18 @@ button {
     text-decoration: none;
     border: none;
     cursor: pointer;
+    display: inline-block;
+    margin-top: 0.5rem;
+}
+
+.button:hover,
+button:hover {
+    background: #444;
+}
+
+a {
+    color: #222;
+    font-weight: bold;
 }
 
 textarea {
@@ -36,10 +53,42 @@ textarea {
     min-height: 150px;
     padding: 0.75rem;
     box-sizing: border-box;
+    margin-bottom: 0.5rem;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="datetime-local"],
+select {
     width: 100%;
     padding: 0.75rem;
     box-sizing: border-box;
+    margin: 0.25rem 0 1rem 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+.filter-form {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.platform-status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    background: #f9f9f9;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .platform-status-grid {
+        grid-template-columns: 1fr;
+    }
 }

@@ -17,14 +17,55 @@ class SocialPost(models.Model):
         ("archived", "Archived"),
     ]
 
+    CATEGORY_CHOICES = [
+        ("general", "General"),
+        ("white_label", "White Label"),
+        ("kpopalypse", "KpopalypseNow"),
+        ("toolbox", "ToolBox"),
+        ("personal_brand", "Personal Brand"),
+        ("meme_caption", "Meme / Edit Caption"),
+    ]
+
+    PLATFORM_STATUS_CHOICES = [
+        ("not_ready", "Not Ready"),
+        ("draft", "Draft"),
+        ("ready", "Ready"),
+        ("posted", "Posted"),
+        ("skipped", "Skipped"),
+    ]
+
     title = models.CharField(max_length=200)
     master_text = models.TextField()
+
+    category = models.CharField(
+        max_length=50,
+        choices=CATEGORY_CHOICES,
+        default="general",
+    )
 
     x_text = models.TextField(blank=True)
     reddit_title = models.CharField(max_length=300, blank=True)
     reddit_body = models.TextField(blank=True)
     instagram_caption = models.TextField(blank=True)
     hashtags = models.TextField(blank=True)
+
+    x_status = models.CharField(
+        max_length=20,
+        choices=PLATFORM_STATUS_CHOICES,
+        default="draft",
+    )
+
+    reddit_status = models.CharField(
+        max_length=20,
+        choices=PLATFORM_STATUS_CHOICES,
+        default="draft",
+    )
+
+    instagram_status = models.CharField(
+        max_length=20,
+        choices=PLATFORM_STATUS_CHOICES,
+        default="draft",
+    )
 
     status = models.CharField(
         max_length=20,

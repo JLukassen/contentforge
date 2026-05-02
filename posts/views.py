@@ -5,8 +5,26 @@ from .models import SocialPost
 
 
 def post_list(request):
+    category = request.GET.get("category")
+    status = request.GET.get("status")
+
     posts = SocialPost.objects.order_by("-created_at")
-    return render(request, "posts/post_list.html", {"posts": posts})
+
+    if category:
+        posts = posts.filter(category=category)
+
+    if status:
+        posts = posts.filter(status=status)
+
+    context = {
+        "posts": posts,
+        "category_choices": SocialPost.CATEGORY_CHOICES,
+        "status_choices": SocialPost.STATUS_CHOICES,
+        "selected_category": category,
+        "selected_status": status,
+    }
+
+    return render(request, "posts/post_list.html", context)
 
 
 def post_create(request):
@@ -45,3 +63,20 @@ def post_update(request, pk):
         form = SocialPostForm(instance=post)
 
     return render(request, "posts/post_create.html", {"form": form, "post": post})
+
+
+def post_archive(request, pk):
+    post = get_object_or_404(SocialPost, pk=pk)
+    post.status = "archived"
+    post.save()
+    return redirect("post_list")
+
+
+def post_delete(request, pk):
+    post = get_object_or_404(SocialPost, pk=pk)
+
+    if request.method == "POST":
+        post.delete()
+        return redirect("post_list")
+
+    return render(request, "posts/post_confirm_delete.html", {"post": post})

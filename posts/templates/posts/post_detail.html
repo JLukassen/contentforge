@@ -10,12 +10,25 @@
     <main class="container">
         <h1>{{ post.title }}</h1>
 
-        <p><strong>Status:</strong> {{ post.status }}</p>
+        <p><strong>Category:</strong> {{ post.get_category_display }}</p>
+        <p><strong>Status:</strong> {{ post.get_status_display }}</p>
         <p><strong>Scheduled For:</strong> {{ post.scheduled_for }}</p>
+
+        <section class="card">
+            <h2>Platform Status</h2>
+
+            <div class="platform-status-grid">
+                <p><strong>X:</strong> {{ post.get_x_status_display }}</p>
+                <p><strong>Reddit:</strong> {{ post.get_reddit_status_display }}</p>
+                <p><strong>Instagram:</strong> {{ post.get_instagram_status_display }}</p>
+            </div>
+        </section>
 
         <p>
             <a href="{% url 'post_update' post.pk %}">Edit Post</a> |
             <a href="{% url 'post_preview' post.pk %}">Preview</a> |
+            <a href="{% url 'post_archive' post.pk %}">Archive</a> |
+            <a href="{% url 'post_delete' post.pk %}">Delete</a> |
             <a href="{% url 'post_list' %}">Back to posts</a>
         </p>
 
@@ -54,6 +67,8 @@
         <p>
             <a href="{% url 'post_update' post.pk %}">Edit Post</a> |
             <a href="{% url 'post_preview' post.pk %}">Preview</a> |
+            <a href="{% url 'post_archive' post.pk %}">Archive</a> |
+            <a href="{% url 'post_delete' post.pk %}">Delete</a> |
             <a href="{% url 'post_list' %}">Back to posts</a>
         </p>
     </main>
