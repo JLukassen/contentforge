@@ -3,18 +3,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create Post - ContentForge</title>
+    <title>
+        {% if post %}
+            Edit Post - ContentForge
+        {% else %}
+            Create Post - ContentForge
+        {% endif %}
+    </title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <main class="container">
-        <h1>Create Post</h1>
+        {% if post %}
+            <h1>Edit Post</h1>
+        {% else %}
+            <h1>Create Post</h1>
+        {% endif %}
 
-        <form method="post" class="card">
+        <form method="post" enctype="multipart/form-data" class="card">
             {% csrf_token %}
             {{ form.as_p }}
 
-            <button class="button" type="submit">Generate Drafts</button>
+            {% if post %}
+                <button class="button" type="submit">Save Changes</button>
+            {% else %}
+                <button class="button" type="submit">Generate Drafts</button>
+            {% endif %}
         </form>
 
         <p>

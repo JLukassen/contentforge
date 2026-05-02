@@ -14,6 +14,13 @@
         <p><strong>Status:</strong> {{ post.get_status_display }}</p>
         <p><strong>Scheduled For:</strong> {{ post.scheduled_for }}</p>
 
+        {% if post.image %}
+            <section class="card">
+                <h2>Attached Image</h2>
+                <img class="post-image" src="{{ post.image.url }}" alt="{{ post.title }}">
+            </section>
+        {% endif %}
+
         <section class="card">
             <h2>Platform Status</h2>
 

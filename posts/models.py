@@ -37,6 +37,11 @@ class SocialPost(models.Model):
     title = models.CharField(max_length=200)
     master_text = models.TextField()
 
+    image = models.ImageField(
+     upload_to="post_images/",
+        blank=True,
+        null=True,
+    )
     category = models.CharField(
         max_length=50,
         choices=CATEGORY_CHOICES,

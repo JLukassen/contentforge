@@ -29,7 +29,7 @@ def post_list(request):
 
 def post_create(request):
     if request.method == "POST":
-        form = SocialPostForm(request.POST)
+        form = SocialPostForm(request.POST, request.FILES)
 
         if form.is_valid():
             post = form.save()
@@ -54,7 +54,7 @@ def post_update(request, pk):
     post = get_object_or_404(SocialPost, pk=pk)
 
     if request.method == "POST":
-        form = SocialPostForm(request.POST, instance=post)
+        form = SocialPostForm(request.POST, request.FILES, instance=post)
 
         if form.is_valid():
             post = form.save()

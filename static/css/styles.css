@@ -92,3 +92,19 @@ label {
         grid-template-columns: 1fr;
     }
 }
+
+.post-image {
+    width: 100%;
+    max-width: 700px;
+    border-radius: 10px;
+    display: block;
+    margin: 1rem 0;
+}
+
+.post-thumbnail {
+    width: 180px;
+    max-width: 100%;
+    border-radius: 8px;
+    display: block;
+    margin: 0.75rem 0;
+}
