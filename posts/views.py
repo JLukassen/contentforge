@@ -30,3 +30,18 @@ def post_detail(request, pk):
 def post_preview(request, pk):
     post = get_object_or_404(SocialPost, pk=pk)
     return render(request, "posts/post_preview.html", {"post": post})
+
+
+def post_update(request, pk):
+    post = get_object_or_404(SocialPost, pk=pk)
+
+    if request.method == "POST":
+        form = SocialPostForm(request.POST, instance=post)
+
+        if form.is_valid():
+            post = form.save()
+            return redirect("post_detail", pk=post.pk)
+    else:
+        form = SocialPostForm(instance=post)
+
+    return render(request, "posts/post_create.html", {"form": form, "post": post})

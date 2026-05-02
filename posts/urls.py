@@ -8,4 +8,5 @@ urlpatterns = [
     path("new/", views.post_create, name="post_create"),
     path("<int:pk>/", views.post_detail, name="post_detail"),
     path("<int:pk>/preview/", views.post_preview, name="post_preview"),
+    path("<int:pk>/edit/", views.post_update, name="post_update"),
 ]

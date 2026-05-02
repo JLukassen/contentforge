@@ -13,35 +13,65 @@
         <p><strong>Status:</strong> {{ post.status }}</p>
         <p><strong>Scheduled For:</strong> {{ post.scheduled_for }}</p>
 
+        <p>
+            <a href="{% url 'post_update' post.pk %}">Edit Post</a> |
+            <a href="{% url 'post_preview' post.pk %}">Preview</a> |
+            <a href="{% url 'post_list' %}">Back to posts</a>
+        </p>
+
         <hr>
 
         <section class="card">
             <h2>Master Post</h2>
-            <textarea readonly>{{ post.master_text }}</textarea>
+            <textarea id="masterText" readonly>{{ post.master_text }}</textarea>
+            <button onclick="copyText('masterText')">Copy Master Text</button>
         </section>
 
         <section class="card">
             <h2>X Version</h2>
-            <textarea readonly>{{ post.x_text }}</textarea>
+            <textarea id="xText" readonly>{{ post.x_text }}</textarea>
+            <button onclick="copyText('xText')">Copy X Text</button>
         </section>
 
         <section class="card">
-            <h2>Reddit Title</h2>
-            <input type="text" value="{{ post.reddit_title }}" readonly>
+            <h2>Reddit</h2>
 
-            <h2>Reddit Body</h2>
-            <textarea readonly>{{ post.reddit_body }}</textarea>
+            <label for="redditTitle"><strong>Reddit Title</strong></label>
+            <input id="redditTitle" type="text" value="{{ post.reddit_title }}" readonly>
+            <button onclick="copyInputText('redditTitle')">Copy Reddit Title</button>
+
+            <h3>Reddit Body</h3>
+            <textarea id="redditBody" readonly>{{ post.reddit_body }}</textarea>
+            <button onclick="copyText('redditBody')">Copy Reddit Body</button>
         </section>
 
         <section class="card">
             <h2>Instagram Caption</h2>
-            <textarea readonly>{{ post.instagram_caption }}</textarea>
+            <textarea id="instagramCaption" readonly>{{ post.instagram_caption }}</textarea>
+            <button onclick="copyText('instagramCaption')">Copy Instagram Caption</button>
         </section>
 
         <p>
+            <a href="{% url 'post_update' post.pk %}">Edit Post</a> |
             <a href="{% url 'post_preview' post.pk %}">Preview</a> |
             <a href="{% url 'post_list' %}">Back to posts</a>
         </p>
     </main>
+
+    <script>
+        function copyText(elementId) {
+            const textBox = document.getElementById(elementId);
+            textBox.select();
+            textBox.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(textBox.value);
+        }
+
+        function copyInputText(elementId) {
+            const input = document.getElementById(elementId);
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+        }
+    </script>
 </body>
 </html>
