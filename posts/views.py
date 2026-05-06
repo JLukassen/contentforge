@@ -1,12 +1,34 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Count
 
 from .forms import SocialPostForm
 from .models import SocialPost
 
 
 def post_list(request):
+    selected_status = request.GET.get("status", "")
+    search_query = request.GET.get("q", "").strip()
+
     posts = SocialPost.objects.order_by("-created_at")
-    return render(request, "posts/post_list.html", {"posts": posts})
+
+    if selected_status:
+        posts = posts.filter(status=selected_status)
+
+    if search_query:
+        posts = posts.filter(title__icontains=search_query)
+
+    status_counts = SocialPost.objects.values("status").annotate(total=Count("id"))
+    status_summary = {item["status"]: item["total"] for item in status_counts}
+
+    context = {
+        "posts": posts,
+        "selected_status": selected_status,
+        "search_query": search_query,
+        "status_choices": SocialPost.STATUS_CHOICES,
+        "status_summary": status_summary,
+        "total_posts": SocialPost.objects.count(),
+    }
+    return render(request, "posts/post_list.html", context)
 
 
 def post_create(request):
@@ -45,3 +67,13 @@ def post_update(request, pk):
         form = SocialPostForm(instance=post)
 
     return render(request, "posts/post_create.html", {"form": form, "post": post})
+
+
+def post_delete(request, pk):
+    post = get_object_or_404(SocialPost, pk=pk)
+
+    if request.method == "POST":
+        post.delete()
+        return redirect("post_list")
+
+    return redirect("post_detail", pk=post.pk)
