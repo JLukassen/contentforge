@@ -8,27 +8,35 @@
 </head>
 <body>
     <main class="container">
-        <h1>Preview: {{ post.title }}</h1>
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Platform preview</p>
+                <h1>Preview: {{ post.title }}</h1>
+            </div>
+
+            <a class="secondary-button" href="{% url 'post_detail' post.pk %}">Back to detail</a>
+        </header>
+
+        <section class="card">
+            <h2>Telegram</h2>
+            <p>{{ post.telegram_text|linebreaks }}</p>
+        </section>
 
         <section class="card">
             <h2>X</h2>
-            <p>{{ post.x_text }}</p>
+            <p>{{ post.x_text|linebreaks }}</p>
         </section>
 
         <section class="card">
             <h2>Reddit</h2>
             <h3>{{ post.reddit_title }}</h3>
-            <p>{{ post.reddit_body }}</p>
+            <p>{{ post.reddit_body|linebreaks }}</p>
         </section>
 
         <section class="card">
             <h2>Instagram</h2>
             <p>{{ post.instagram_caption|linebreaks }}</p>
         </section>
-
-        <p>
-            <a href="{% url 'post_detail' post.pk %}">Back to detail</a>
-        </p>
     </main>
 </body>
 </html>
