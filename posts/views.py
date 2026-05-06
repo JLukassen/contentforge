@@ -19,13 +19,21 @@ def post_list(request):
 
     status_counts = SocialPost.objects.values("status").annotate(total=Count("id"))
     status_summary = {item["status"]: item["total"] for item in status_counts}
+    status_cards = [
+        {
+            "value": value,
+            "label": label,
+            "total": status_summary.get(value, 0),
+        }
+        for value, label in SocialPost.STATUS_CHOICES
+    ]
 
     context = {
         "posts": posts,
         "selected_status": selected_status,
         "search_query": search_query,
         "status_choices": SocialPost.STATUS_CHOICES,
-        "status_summary": status_summary,
+        "status_cards": status_cards,
         "total_posts": SocialPost.objects.count(),
     }
     return render(request, "posts/post_list.html", context)
