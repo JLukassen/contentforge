@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .forms import SocialPostForm
 from .models import SocialPost
+from .services.telegram import TelegramPublishError, publish_to_telegram
 
 
 def post_list(request):
@@ -75,6 +77,38 @@ def post_update(request, pk):
         form = SocialPostForm(instance=post)
 
     return render(request, "posts/post_create.html", {"form": form, "post": post})
+
+
+def post_publish_telegram(request, pk):
+    post = get_object_or_404(SocialPost, pk=pk)
+
+    if request.method != "POST":
+        return redirect("post_detail", pk=post.pk)
+
+    try:
+        result = publish_to_telegram(post.telegram_text)
+    except TelegramPublishError as exc:
+        post.telegram_status = "failed"
+        post.last_publish_error = str(exc)
+        post.save(update_fields=["telegram_status", "last_publish_error", "updated_at"])
+        return redirect("post_detail", pk=post.pk)
+
+    post.telegram_status = "posted"
+    post.telegram_message_id = result["message_id"]
+    post.telegram_chat_id = result["chat_id"]
+    post.last_publish_error = ""
+    post.published_at = timezone.now()
+    post.save(
+        update_fields=[
+            "telegram_status",
+            "telegram_message_id",
+            "telegram_chat_id",
+            "last_publish_error",
+            "published_at",
+            "updated_at",
+        ]
+    )
+    return redirect("post_detail", pk=post.pk)
 
 
 def post_delete(request, pk):
