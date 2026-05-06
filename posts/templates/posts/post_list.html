@@ -24,10 +24,10 @@
                 <span class="stat-label">Total posts</span>
             </article>
 
-            {% for value, label in status_choices %}
+            {% for card in status_cards %}
                 <article class="stat-card">
-                    <span class="stat-number">{{ status_summary|get_item:value|default:0 }}</span>
-                    <span class="stat-label">{{ label }}</span>
+                    <span class="stat-number">{{ card.total }}</span>
+                    <span class="stat-label">{{ card.label }}</span>
                 </article>
             {% endfor %}
         </section>
