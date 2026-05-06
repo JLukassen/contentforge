@@ -30,3 +30,22 @@ def format_for_instagram(master_text, hashtags=""):
         caption += "\n\n" + hashtags.strip()
 
     return caption
+
+
+def format_for_telegram(master_text, hashtags=""):
+    """
+    Create a Telegram message with optional hashtags.
+
+    Telegram messages support longer text than X, but this keeps the output
+    inside Telegram's 4096 character message limit.
+    """
+    max_length = 4096
+    message = master_text.strip()
+
+    if hashtags:
+        message += "\n\n" + hashtags.strip()
+
+    if len(message) <= max_length:
+        return message
+
+    return message[:4093].rstrip() + "..."
