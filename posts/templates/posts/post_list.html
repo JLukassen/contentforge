@@ -8,25 +8,78 @@
 </head>
 <body>
     <main class="container">
-        <h1>ContentForge</h1>
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Content pipeline</p>
+                <h1>ContentForge</h1>
+                <p class="muted">Create one master idea, then shape it for X, Reddit, and Instagram.</p>
+            </div>
 
-        <a class="button" href="{% url 'post_create' %}">Create New Post</a>
+            <a class="button" href="{% url 'post_create' %}">Create New Post</a>
+        </header>
 
-        <hr>
+        <section class="stats-grid">
+            <article class="stat-card">
+                <span class="stat-number">{{ total_posts }}</span>
+                <span class="stat-label">Total posts</span>
+            </article>
+
+            {% for value, label in status_choices %}
+                <article class="stat-card">
+                    <span class="stat-number">{{ status_summary|get_item:value|default:0 }}</span>
+                    <span class="stat-label">{{ label }}</span>
+                </article>
+            {% endfor %}
+        </section>
+
+        <form class="filter-bar" method="get">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search by title..."
+                value="{{ search_query }}"
+            >
+
+            <select name="status">
+                <option value="">All statuses</option>
+                {% for value, label in status_choices %}
+                    <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Filter</button>
+            <a class="secondary-button" href="{% url 'post_list' %}">Reset</a>
+        </form>
 
         {% for post in posts %}
-            <section class="card">
-                <h2>
-                    <a href="{% url 'post_detail' post.pk %}">
-                        {{ post.title }}
-                    </a>
-                </h2>
+            <section class="card post-card">
+                <div>
+                    <h2>
+                        <a href="{% url 'post_detail' post.pk %}">
+                            {{ post.title }}
+                        </a>
+                    </h2>
 
-                <p><strong>Status:</strong> {{ post.status }}</p>
-                <p><strong>Created:</strong> {{ post.created_at }}</p>
+                    <p class="muted">Created {{ post.created_at|date:"M j, Y g:i A" }}</p>
+
+                    {% if post.scheduled_for %}
+                        <p class="muted">Scheduled {{ post.scheduled_for|date:"M j, Y g:i A" }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="post-actions">
+                    <span class="status-pill status-{{ post.status }}">{{ post.get_status_display }}</span>
+                    <a href="{% url 'post_preview' post.pk %}">Preview</a>
+                    <a href="{% url 'post_update' post.pk %}">Edit</a>
+                </div>
             </section>
         {% empty %}
-            <p>No posts yet.</p>
+            <section class="card empty-state">
+                <h2>No posts found.</h2>
+                <p>Create your first content draft or clear your filters.</p>
+            </section>
         {% endfor %}
     </main>
 </body>
