@@ -25,11 +25,21 @@ body {
 }
 
 .header-actions,
-.post-actions {
+.post-actions,
+.button-row,
+.section-header {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
+}
+
+.section-header {
+    justify-content: space-between;
+}
+
+.button-row {
+    margin-top: 0.75rem;
 }
 
 .eyebrow {
@@ -47,7 +57,8 @@ body {
 
 .card,
 .stat-card,
-.danger-zone {
+.danger-zone,
+.alert {
     background: #fff;
     border-radius: 10px;
     padding: 1rem;
@@ -55,10 +66,19 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+.alert-error {
+    border: 1px solid #e1b4b4;
+    background: #fff6f6;
+}
+
 .post-card {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+}
+
+.platform-card textarea {
+    min-height: 180px;
 }
 
 .stats-grid {
@@ -137,6 +157,10 @@ button {
 
 .status-posted {
     background: #dcfce7;
+}
+
+.status-failed {
+    background: #fee2e2;
 }
 
 .status-archived {
