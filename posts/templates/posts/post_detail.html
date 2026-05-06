@@ -8,29 +8,35 @@
 </head>
 <body>
     <main class="container">
-        <h1>{{ post.title }}</h1>
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Draft detail</p>
+                <h1>{{ post.title }}</h1>
+                <p class="muted">
+                    Status: <span class="status-pill status-{{ post.status }}">{{ post.get_status_display }}</span>
+                    {% if post.scheduled_for %}
+                        · Scheduled {{ post.scheduled_for|date:"M j, Y g:i A" }}
+                    {% endif %}
+                </p>
+            </div>
 
-        <p><strong>Status:</strong> {{ post.status }}</p>
-        <p><strong>Scheduled For:</strong> {{ post.scheduled_for }}</p>
-
-        <p>
-            <a href="{% url 'post_update' post.pk %}">Edit Post</a> |
-            <a href="{% url 'post_preview' post.pk %}">Preview</a> |
-            <a href="{% url 'post_list' %}">Back to posts</a>
-        </p>
-
-        <hr>
+            <div class="header-actions">
+                <a class="secondary-button" href="{% url 'post_list' %}">Back</a>
+                <a class="secondary-button" href="{% url 'post_preview' post.pk %}">Preview</a>
+                <a class="button" href="{% url 'post_update' post.pk %}">Edit Post</a>
+            </div>
+        </header>
 
         <section class="card">
             <h2>Master Post</h2>
             <textarea id="masterText" readonly>{{ post.master_text }}</textarea>
-            <button onclick="copyText('masterText')">Copy Master Text</button>
+            <button onclick="copyText('masterText', this)">Copy Master Text</button>
         </section>
 
         <section class="card">
             <h2>X Version</h2>
             <textarea id="xText" readonly>{{ post.x_text }}</textarea>
-            <button onclick="copyText('xText')">Copy X Text</button>
+            <button onclick="copyText('xText', this)">Copy X Text</button>
         </section>
 
         <section class="card">
@@ -38,39 +44,52 @@
 
             <label for="redditTitle"><strong>Reddit Title</strong></label>
             <input id="redditTitle" type="text" value="{{ post.reddit_title }}" readonly>
-            <button onclick="copyInputText('redditTitle')">Copy Reddit Title</button>
+            <button onclick="copyInputText('redditTitle', this)">Copy Reddit Title</button>
 
             <h3>Reddit Body</h3>
             <textarea id="redditBody" readonly>{{ post.reddit_body }}</textarea>
-            <button onclick="copyText('redditBody')">Copy Reddit Body</button>
+            <button onclick="copyText('redditBody', this)">Copy Reddit Body</button>
         </section>
 
         <section class="card">
             <h2>Instagram Caption</h2>
             <textarea id="instagramCaption" readonly>{{ post.instagram_caption }}</textarea>
-            <button onclick="copyText('instagramCaption')">Copy Instagram Caption</button>
+            <button onclick="copyText('instagramCaption', this)">Copy Instagram Caption</button>
         </section>
 
-        <p>
-            <a href="{% url 'post_update' post.pk %}">Edit Post</a> |
-            <a href="{% url 'post_preview' post.pk %}">Preview</a> |
-            <a href="{% url 'post_list' %}">Back to posts</a>
-        </p>
+        <section class="danger-zone">
+            <h2>Danger Zone</h2>
+            <p>Delete this draft if it is no longer useful.</p>
+            <form method="post" action="{% url 'post_delete' post.pk %}" onsubmit="return confirm('Delete this post? This cannot be undone.');">
+                {% csrf_token %}
+                <button class="danger-button" type="submit">Delete Post</button>
+            </form>
+        </section>
     </main>
 
     <script>
-        function copyText(elementId) {
+        function markCopied(button) {
+            const originalText = button.innerText;
+            button.innerText = "Copied";
+            setTimeout(() => {
+                button.innerText = originalText;
+            }, 1200);
+        }
+
+        function copyText(elementId, button) {
             const textBox = document.getElementById(elementId);
             textBox.select();
             textBox.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(textBox.value);
+            markCopied(button);
         }
 
-        function copyInputText(elementId) {
+        function copyInputText(elementId, button) {
             const input = document.getElementById(elementId);
             input.select();
             input.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(input.value);
+            markCopied(button);
         }
     </script>
 </body>
