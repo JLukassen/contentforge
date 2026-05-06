@@ -27,20 +27,58 @@
             </div>
         </header>
 
+        {% if post.last_publish_error %}
+            <section class="alert alert-error">
+                <strong>Publishing error:</strong> {{ post.last_publish_error }}
+            </section>
+        {% endif %}
+
         <section class="card">
             <h2>Master Post</h2>
             <textarea id="masterText" readonly>{{ post.master_text }}</textarea>
             <button onclick="copyText('masterText', this)">Copy Master Text</button>
         </section>
 
-        <section class="card">
-            <h2>X Version</h2>
+        <section class="card platform-card">
+            <div class="section-header">
+                <h2>Telegram</h2>
+                <span class="status-pill status-{{ post.telegram_status }}">{{ post.get_telegram_status_display }}</span>
+            </div>
+
+            <textarea id="telegramText" readonly>{{ post.telegram_text }}</textarea>
+
+            <div class="button-row">
+                <button onclick="copyText('telegramText', this)">Copy Telegram Text</button>
+
+                <form method="post" action="{% url 'post_publish_telegram' post.pk %}" onsubmit="return confirm('Post this draft to Telegram now?');">
+                    {% csrf_token %}
+                    <button type="submit">Post to Telegram</button>
+                </form>
+            </div>
+
+            {% if post.telegram_message_id %}
+                <p class="muted">Telegram message ID: {{ post.telegram_message_id }}</p>
+            {% endif %}
+
+            {% if post.telegram_chat_id %}
+                <p class="muted">Telegram chat ID: {{ post.telegram_chat_id }}</p>
+            {% endif %}
+        </section>
+
+        <section class="card platform-card">
+            <div class="section-header">
+                <h2>X Version</h2>
+                <span class="status-pill status-{{ post.x_status }}">{{ post.get_x_status_display }}</span>
+            </div>
             <textarea id="xText" readonly>{{ post.x_text }}</textarea>
             <button onclick="copyText('xText', this)">Copy X Text</button>
         </section>
 
-        <section class="card">
-            <h2>Reddit</h2>
+        <section class="card platform-card">
+            <div class="section-header">
+                <h2>Reddit</h2>
+                <span class="status-pill status-{{ post.reddit_status }}">{{ post.get_reddit_status_display }}</span>
+            </div>
 
             <label for="redditTitle"><strong>Reddit Title</strong></label>
             <input id="redditTitle" type="text" value="{{ post.reddit_title }}" readonly>
@@ -51,8 +89,11 @@
             <button onclick="copyText('redditBody', this)">Copy Reddit Body</button>
         </section>
 
-        <section class="card">
-            <h2>Instagram Caption</h2>
+        <section class="card platform-card">
+            <div class="section-header">
+                <h2>Instagram Caption</h2>
+                <span class="status-pill status-{{ post.instagram_status }}">{{ post.get_instagram_status_display }}</span>
+            </div>
             <textarea id="instagramCaption" readonly>{{ post.instagram_caption }}</textarea>
             <button onclick="copyText('instagramCaption', this)">Copy Instagram Caption</button>
         </section>
